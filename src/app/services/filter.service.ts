@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FilterService {
   private _filters: ReplaySubject<Filter[]> = new ReplaySubject<Filter[]>();
-  filters$: Observable<Filter[]> = this._filters.asObservable();
+  filters: Signal<Filter[]> = toSignal(this._filters.asObservable(), {
+    initialValue: [],
+  });
 
   constructor() {
     this._filters.next([{ name: 'test', value: 'test' }]);

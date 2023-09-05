@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
-import { FilterService } from 'src/app/services/filter.service';
+import { Filter, FilterService } from 'src/app/services/filter.service';
 import { GalleryItem, GalleryService } from 'src/app/services/gallery.service';
 
 @Component({
@@ -23,7 +23,8 @@ export class GalleryComponent {
     tap((id) => console.log(`gallery id: ${id}`))
   );
 
-  data$ = combineLatest([this.galleryId$, this._filterService.filters$]).pipe(
+  filters$: Observable<Filter[]> = toObservable(this._filterService.filters);
+  data$ = combineLatest([this.galleryId$, this.filters$]).pipe(
     switchMap(([id, filters]) =>
       this._galleryService.getGalleryItems(id, filters)
     )
