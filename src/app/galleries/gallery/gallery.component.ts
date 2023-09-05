@@ -24,6 +24,10 @@ export class GalleryComponent {
   );
 
   filters$: Observable<Filter[]> = toObservable(this._filterService.filters);
+
+  // I really dislike having to constantly switch between observables and signals
+  // can we combine them, and use them complemantary?
+
   data$ = combineLatest([this.galleryId$, this.filters$]).pipe(
     switchMap(([id, filters]) =>
       this._galleryService.getGalleryItems(id, filters)
