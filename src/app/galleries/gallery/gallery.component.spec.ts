@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterModule } from '@angular/router';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {
@@ -8,7 +9,7 @@ describe('GalleryComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [GalleryComponent]
+      imports: [GalleryComponent, RouterModule],
     });
     fixture = TestBed.createComponent(GalleryComponent);
     component = fixture.componentInstance;

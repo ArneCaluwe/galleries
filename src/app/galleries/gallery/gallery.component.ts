@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { GalleryItem, GalleryService } from 'src/app/services/gallery.service';
+import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
-import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
+import { GalleryItem, GalleryService } from 'src/app/services/gallery.service';
 
 @Component({
   selector: 'app-gallery',
