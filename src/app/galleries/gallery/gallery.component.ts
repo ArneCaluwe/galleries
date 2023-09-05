@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
@@ -27,6 +28,7 @@ export class GalleryComponent {
       this._galleryService.getGalleryItems(id, filters)
     )
   );
+  data = toSignal(this.data$);
 
   favouritesCount$ = this.data$.pipe(map((d) => getFavouritesCount(d)));
 }
