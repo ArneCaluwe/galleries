@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
@@ -28,9 +28,9 @@ export class GalleryComponent {
       this._galleryService.getGalleryItems(id, filters)
     )
   );
-  data = toSignal(this.data$);
+  data = toSignal(this.data$, { initialValue: [] });
 
-  favouritesCount$ = this.data$.pipe(map((d) => getFavouritesCount(d)));
+  favouritesCount = computed(() => getFavouritesCount(this.data())); // this.data$.pipe(map((d) => getFavouritesCount(d)));
 }
 
 function getFavouritesCount(data: GalleryItem[]): number {
