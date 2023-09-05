@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Observable, combineLatest, map, switchMap, tap } from 'rxjs';
-import { Filter, FilterService } from 'src/app/services/filter.service';
+import { Observable, map, pipe, switchMap, tap } from 'rxjs';
+import { computedFrom } from 'src/app/helpers/computed-from';
+import { FilterService } from 'src/app/services/filter.service';
 import { GalleryItem, GalleryService } from 'src/app/services/gallery.service';
 
 @Component({
@@ -23,17 +23,17 @@ export class GalleryComponent {
     tap((id) => console.log(`gallery id: ${id}`))
   );
 
-  filters$: Observable<Filter[]> = toObservable(this._filterService.filters);
-
   // I really dislike having to constantly switch between observables and signals
   // can we combine them, and use them complemantary?
 
-  data$ = combineLatest([this.galleryId$, this.filters$]).pipe(
-    switchMap(([id, filters]) =>
-      this._galleryService.getGalleryItems(id, filters)
+  data = computedFrom(
+    [this.galleryId$, this._filterService.filters],
+    pipe(
+      switchMap(([id, filters]) =>
+        this._galleryService.getGalleryItems(id, filters)
+      )
     )
   );
-  data = toSignal(this.data$, { initialValue: [] });
 
   favouritesCount = computed(() => getFavouritesCount(this.data())); // this.data$.pipe(map((d) => getFavouritesCount(d)));
 }
